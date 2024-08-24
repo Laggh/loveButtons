@@ -1,8 +1,7 @@
-print("mobile.lua")
-local API = {}
-API.buttons = {}
+local loveButtons = {}
+loveButtons.buttons = {}
 
-function API.getAngle(_X1,_Y1,_X2,_Y2,_IsDeg)
+function loveButtons.getAngle(_X1,_Y1,_X2,_Y2,_IsDeg)
     -- angle in radians
     local angleRadians = math.atan2(_Y2 - _Y1, _X2 - _X1);
         
@@ -12,9 +11,9 @@ function API.getAngle(_X1,_Y1,_X2,_Y2,_IsDeg)
     return angleRadians
 end
 
-function API.createButton(_Id,_X,_Y,_Width,_Height)
+function loveButtons.createButton(_Id,_X,_Y,_Width,_Height)
     local itExists = false
-    for i,v in ipairs(API.buttons) do
+    for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "button" then 
             v.x = _X
             v.y = _Y
@@ -34,14 +33,14 @@ function API.createButton(_Id,_X,_Y,_Width,_Height)
         button.id = _Id
         button.length = 0
 
-        table.insert(API.buttons,button)
+        table.insert(loveButtons.buttons,button)
     end
 end
 
-function API.createJoystick(_Id,_X,_Y,_SizeInner,_SizeOuter)
-    for i,v in ipairs(API.buttons) do
+function loveButtons.createJoystick(_Id,_X,_Y,_SizeInner,_SizeOuter)
+    for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "joystick" then
-            table.remove(API.buttons,i) 
+            table.remove(loveButtons.buttons,i) 
         end
     end
     local joystick = {}
@@ -57,32 +56,32 @@ function API.createJoystick(_Id,_X,_Y,_SizeInner,_SizeOuter)
     joystick.id = _Id
     joystick.touchId = 0
 
-    table.insert(API.buttons,joystick)
+    table.insert(loveButtons.buttons,joystick)
 end
 
-function API.deleteButton(_Id)
-    for i,v in ipairs(API.buttons) do
+function loveButtons.deleteButton(_Id)
+    for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "button" then 
-            table.remove(API.buttons,i)
+            table.remove(loveButtons.buttons,i)
         end
     end
 end
 
-function API.deleteJoystick(_Id)
-    for i,v in ipairs(API.buttons) do
+function loveButtons.deleteJoystick(_Id)
+    for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "joystick" then
-            table.remove(API.buttons,i)
+            table.remove(loveButtons.buttons,i)
         end
     end
 end
 
-function API.run()
+function loveButtons.run()
     local x,y
     local touches = love.touch.getTouches()
     if love.mouse.isDown(1) then
         table.insert(touches,"mouse")
     end
-    for i,v in ipairs(API.buttons) do
+    for i,v in ipairs(loveButtons.buttons) do
         if v.type == "button" then
             v.press = false            
             for ii,vv in ipairs(touches) do
@@ -97,12 +96,12 @@ function API.run()
             end
 
             if v.press then v.length = v.length + 1 else v.length = 0 end
-            if API.onPress and v.length == 1 then API.onPress(v.id) end
+            if loveButtons.onPress and v.length == 1 then loveButtons.onPress(v.id) end
         end
 
         if v.type == "joystick" then
             v.force = ((v.inputX)^2+(v.inputY)^2)^0.5
-            v.angle = API.getAngle(0,0,v.inputX,v.inputY)
+            v.angle = loveButtons.getAngle(0,0,v.inputX,v.inputY)
             if v.touchId == 0 then
                 v.inputX , v.inputY = 0,0            
                 for ii,vv in ipairs(touches) do
@@ -143,8 +142,8 @@ function API.run()
 
 end
 
-function API.checkButton(_Id)
-    for i,v in ipairs(API.buttons) do
+function loveButtons.checkButton(_Id)
+    for i,v in ipairs(loveButtons.buttons) do
         if v.type == "button" and v.id == _Id then
             return v.press, v.length
         end
@@ -152,8 +151,8 @@ function API.checkButton(_Id)
     return nil
 end
 
-function API.checkJoystick(_Id)
-    for i,v in ipairs(API.buttons) do
+function loveButtons.checkJoystick(_Id)
+    for i,v in ipairs(loveButtons.buttons) do
         if v.type == "joystick" and v.id == _Id then
             return v.inputX, v.inputY ,v.angle, v.force
         end
@@ -162,8 +161,8 @@ function API.checkJoystick(_Id)
 end
 
 
-function API.render()
-    for i,v in ipairs(API.buttons) do
+function loveButtons.render()
+    for i,v in ipairs(loveButtons.buttons) do
         if v.type == "button" then            
             local RENDER -- "line" / "fill"
             if v.press then RENDER = "fill" else RENDER = "line" end
@@ -181,4 +180,4 @@ end
 
 
 
-return API
+return loveButtons
