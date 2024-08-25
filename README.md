@@ -15,21 +15,24 @@ Baixe o arquivo [loveButtons.Lua](loveButtons.Lua) e coloque ele na mesma pasta 
 loveButtons = require("loveButtons")
 ```
 
+
+# Exemplos
+
 ```Lua
 loveButtons = require("loveButtons")
 
 function love.load()
-
+ loveButtons.createButton("button",{...})
 end
 
-function love.uptade()
-
+function love.update()
+ loveButtons.run()
 end
 
 function love.draw()
-
+ loveButtons.render()
 end
+```
 
-# Exemplos
-
+# Documentação 
 
