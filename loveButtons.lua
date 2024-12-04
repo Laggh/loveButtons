@@ -1,7 +1,9 @@
 local loveButtons = {}
 loveButtons.buttons = {}
 
-function loveButtons.getAngle(_X1,_Y1,_X2,_Y2,_IsDeg)
+-- Get the angle between 2 points
+-- (X1,Y1,X2,Y2)
+function loveButtons.getAngle(_X1,_Y1,_X2,_Y2)
     -- angle in radians
     local angleRadians = math.atan2(_Y2 - _Y1, _X2 - _X1);
         
@@ -11,6 +13,8 @@ function loveButtons.getAngle(_X1,_Y1,_X2,_Y2,_IsDeg)
     return angleRadians
 end
 
+-- Create a button
+-- (ID,X,Y,Width,Height)
 function loveButtons.createButton(_Id,_X,_Y,_Width,_Height)
     local itExists = false
     for i,v in ipairs(loveButtons.buttons) do
@@ -37,6 +41,8 @@ function loveButtons.createButton(_Id,_X,_Y,_Width,_Height)
     end
 end
 
+-- Create a joystick
+-- (ID,X,Y,SizeInner,SizeOuter)
 function loveButtons.createJoystick(_Id,_X,_Y,_SizeInner,_SizeOuter)
     for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "joystick" then
@@ -59,6 +65,8 @@ function loveButtons.createJoystick(_Id,_X,_Y,_SizeInner,_SizeOuter)
     table.insert(loveButtons.buttons,joystick)
 end
 
+-- Delete a button
+-- (ID)
 function loveButtons.deleteButton(_Id)
     for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "button" then 
@@ -67,6 +75,8 @@ function loveButtons.deleteButton(_Id)
     end
 end
 
+-- Delete a joystick
+-- (ID)
 function loveButtons.deleteJoystick(_Id)
     for i,v in ipairs(loveButtons.buttons) do
         if v.id == _Id and v.type == "joystick" then
@@ -75,6 +85,7 @@ function loveButtons.deleteJoystick(_Id)
     end
 end
 
+-- Function that runs the buttons
 function loveButtons.run()
     local x,y
     local touches = love.touch.getTouches()
@@ -142,6 +153,8 @@ function loveButtons.run()
 
 end
 
+-- checks if a button is pressed and its length
+-- pressed, lenght = (ID)
 function loveButtons.checkButton(_Id)
     for i,v in ipairs(loveButtons.buttons) do
         if v.type == "button" and v.id == _Id then
@@ -151,6 +164,8 @@ function loveButtons.checkButton(_Id)
     return nil
 end
 
+-- gets the joystick input
+-- inputX, inputY, angle, force = (ID)
 function loveButtons.checkJoystick(_Id)
     for i,v in ipairs(loveButtons.buttons) do
         if v.type == "joystick" and v.id == _Id then
@@ -160,7 +175,7 @@ function loveButtons.checkJoystick(_Id)
     return nil
 end
 
-
+-- renders the buttons
 function loveButtons.render()
     for i,v in ipairs(loveButtons.buttons) do
         if v.type == "button" then            
